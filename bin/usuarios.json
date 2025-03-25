@@ -1,0 +1,35 @@
+[
+    {
+      "ID": 1,
+      "Nombre": "Juan",
+      "ApellidoP": "Perez",
+      "ApellidoM": "zoe",
+      "FechaRegistro": "2024-02-05T10:00:00Z",
+      "Activo": 1
+    },
+    {
+      "ID": 2,
+      "Nombre": "yuan",
+      "ApellidoP": "Bautista",
+      "ApellidoM": "Arez",
+      "FechaRegistro": "2024-02-05T10:05:00Z",
+      "Activo": 1
+    },
+    {
+      "ID": 3,
+      "Nombre": "Maria",
+      "ApellidoP": "Torres",
+      "ApellidoM": "Gomez",
+      "FechaRegistro": "2024-02-05T10:10:00Z",
+      "Activo": 1
+    },
+    {
+      "ID": 4,
+      "Nombre": "Angel",
+      "ApellidoP": "Martinez",
+      "ApellidoM": "Somez",
+      "FechaRegistro": "2024-02-05T10:15:00Z",
+      "Activo": 1
+    }
+  ]
+  

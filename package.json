@@ -1,0 +1,18 @@
+{
+  "name": "p2_areafiguras",
+  "version": "1.0.0",
+  "description": "area de figuras con d3 ",
+  "main": "index.js",
+  "scripts": {
+    "start": "lite-server",
+    "build": "tsc"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/d3": "^7.4.3"
+  },
+  "devDependencies": {
+    "lite-server": "^2.6.1"
+  }
+}

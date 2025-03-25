@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+      "target": "es2017",  // Cambiado de es6 a es2017
+      "lib": [
+        "dom",
+        "es2017"  // Cambiado de es6 a es2017
+      ],
+      "module": "commonjs",
+      "sourceMap": true,
+      "outDir": "bin/js",
+      "declaration": false,
+      "moduleResolution": "node",
+      "experimentalDecorators": false
+    }
+  }
+  
