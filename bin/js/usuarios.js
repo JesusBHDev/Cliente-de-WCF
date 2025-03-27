@@ -6,6 +6,8 @@ var app;
             this.idEliminar = null;
             this.ordenAscendente = true;
             this.columnaOrdenada = null;
+            this.contadorTiempo = 0;
+            this.intervaloCronometro = null;
             this.formatearFecha = d3.timeFormat("%d/%m/%Y %H:%M");
             this.formatearFecha2 = d3.timeFormat("%d/%m/%Y");
             this.datosUsuario = new app.DatosUsuarios();
@@ -60,13 +62,20 @@ var app;
                 .style("color", "#black")
                 .style("cursor", "pointer")
                 .on("click", () => this.mostrarModalNuevoUsuario());
-            encabezadoModalUsuario
+            let contenedorRecarga = encabezadoModalUsuario.append("div").style("display", "flex").style("align-items", "center");
+            contenedorRecarga
                 .append("button")
-                .text("♻️recargar")
+                .text("♻️ Recargar")
                 .style("background-color", "#81BECE")
                 .style("color", "black")
                 .style("cursor", "pointer")
-                .on("click", () => this.cargarUsuarios());
+                .style("margin-right", "10px")
+                .on("click", () => this.reiniciarCronometro());
+            this.etiquetaTiempo = contenedorRecarga
+                .append("span")
+                .text("Tiempo: 0s")
+                .style("font-size", "14px")
+                .style("color", "white");
             encabezadoModalUsuario
                 .append("button")
                 .text("Cerrar ❎ ")
@@ -271,6 +280,7 @@ var app;
                 d3.select(this).style("background-color", "#bdc3c7");
             })
                 .on("click", () => this.cancelarEliminar());
+            this.iniciarCronometro();
             this.actualizarTabla();
         }
         ordenarPorColumna(columna) {
@@ -461,6 +471,35 @@ var app;
             this.datosUsuario.cargarUsuarios2(() => {
                 this.actualizarTabla();
             });
+        }
+        iniciarCronometro() {
+            // Si ya hay un intervalo corriendo, lo detenemos primero
+            if (this.intervaloCronometro) {
+                clearInterval(this.intervaloCronometro);
+            }
+            // Reiniciar contador
+            this.contadorTiempo = 0;
+            // Actualizar la visualización inicial
+            this.actualizarVisualizacionTiempo();
+            // Iniciar un nuevo intervalo
+            this.intervaloCronometro = setInterval(() => {
+                this.contadorTiempo++;
+                this.actualizarVisualizacionTiempo();
+            }, 1000);
+        }
+        actualizarVisualizacionTiempo() {
+            const minutos = Math.floor(this.contadorTiempo / 60);
+            const segundos = this.contadorTiempo % 60;
+            if (minutos > 0) {
+                this.etiquetaTiempo.text(`Tiempo: ${minutos}m ${segundos}s`);
+            }
+            else {
+                this.etiquetaTiempo.text(`Tiempo: ${segundos}s`);
+            }
+        }
+        reiniciarCronometro() {
+            this.cargarUsuarios(); // Recarga los datos de los usuarios
+            this.iniciarCronometro(); // Reinicia el cronómetro
         }
     }
     app.Usuario = Usuario;

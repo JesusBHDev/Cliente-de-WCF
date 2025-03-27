@@ -8,7 +8,7 @@ namespace app {
     inputApellidoP: d3.Selection<any, unknown, HTMLInputElement, any>;
     inputApellidoM: d3.Selection<any, unknown, HTMLInputElement, any>;
     inputCorreo: d3.Selection<any, unknown, HTMLInputElement, any>;
-    inputFechaNacimiento:d3.Selection<any, unknown, HTMLInputElement, any>;
+    inputFechaNacimiento: d3.Selection<any, unknown, HTMLInputElement, any>;
     inputFechaRegistro: d3.Selection<any, unknown, HTMLInputElement, any>;
 
     usuarioEditando: any | null = null;
@@ -19,12 +19,16 @@ namespace app {
     inputBusqueda: d3.Selection<any, unknown, HTMLInputElement, any>;
 
     advertenciaEliminar: d3.Selection<any, unknown, HTMLDivElement, any>;
-    private idEliminar: number | null = null;
+    idEliminar: number | null = null;
 
     ordenAscendente: boolean = true;
     columnaOrdenada: string | null = null;
 
     datosUsuario: app.DatosUsuarios;
+
+    contadorTiempo: number = 0;
+    intervaloCronometro: NodeJS.Timeout | null = null;
+    etiquetaTiempo: d3.Selection<any, unknown, HTMLSpanElement, any>;
 
     constructor() {
       this.datosUsuario = new app.DatosUsuarios();
@@ -90,13 +94,23 @@ namespace app {
         .style("cursor", "pointer")
         .on("click", () => this.mostrarModalNuevoUsuario());
 
-      encabezadoModalUsuario
+      let contenedorRecarga = encabezadoModalUsuario.append("div").style("display", "flex").style("align-items", "center");
+
+      contenedorRecarga
         .append("button")
-        .text("♻️recargar")
+        .text("♻️ Recargar")
         .style("background-color", "#81BECE")
         .style("color", "black")
         .style("cursor", "pointer")
-        .on("click", () => this.cargarUsuarios());
+        .style("margin-right", "10px")
+        .on("click", () => this.reiniciarCronometro());
+
+      this.etiquetaTiempo = contenedorRecarga
+        .append("span")
+        .text("Tiempo: 0s")
+        .style("font-size", "14px")
+        .style("color", "white");
+
 
       encabezadoModalUsuario
         .append("button")
@@ -222,8 +236,8 @@ namespace app {
         { label: "Nombre", key: "Nombre" },
         { label: "Apellido P", key: "ApellidoP" },
         { label: "Apellido M", key: "ApellidoM" },
-        {label : "Correo", key : "Correo"},
-        {label : "Fecha Nac", key : "FechaNac"},
+        { label: "Correo", key: "Correo" },
+        { label: "Fecha Nac", key: "FechaNac" },
         { label: "Fecha Registro", key: "FechaRegistro" },
         { label: "Fecha Modificacion", key: "FechaMod" },
         { label: "control", key: null },
@@ -337,7 +351,7 @@ namespace app {
           d3.select(this).style("background-color", "#bdc3c7");
         })
         .on("click", () => this.cancelarEliminar());
-
+      this.iniciarCronometro();
       this.actualizarTabla();
     }
 
@@ -591,5 +605,41 @@ namespace app {
         this.actualizarTabla();
       });
     }
+
+    iniciarCronometro(): void {
+      // Si ya hay un intervalo corriendo, lo detenemos primero
+      if (this.intervaloCronometro) {
+        clearInterval(this.intervaloCronometro);
+      }
+    
+      // Reiniciar contador
+      this.contadorTiempo = 0;
+    
+      // Actualizar la visualización inicial
+      this.actualizarVisualizacionTiempo();
+    
+      // Iniciar un nuevo intervalo
+      this.intervaloCronometro = setInterval(() => {
+        this.contadorTiempo++;
+        this.actualizarVisualizacionTiempo();
+      }, 1000);
+    }
+
+     actualizarVisualizacionTiempo(): void {
+      const minutos = Math.floor(this.contadorTiempo / 60);
+      const segundos = this.contadorTiempo % 60;
+    
+      if (minutos > 0) {
+        this.etiquetaTiempo.text(`Tiempo: ${minutos}m ${segundos}s`);
+      } else {
+        this.etiquetaTiempo.text(`Tiempo: ${segundos}s`);
+      }
+    }
+    
+    reiniciarCronometro(): void {
+      this.cargarUsuarios();  // Recarga los datos de los usuarios
+      this.iniciarCronometro();  // Reinicia el cronómetro
+    }
+    
   }
 }

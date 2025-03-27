@@ -6,7 +6,7 @@ var app;
             this.usuarios = new Map();
         }
         cargarUsuarios2(callback) {
-            let url = "http://192.168.15.188:8000/Services/Usuarios.svc/ObtenerUsuarios";
+            let url = "http://localhost:52127/Services/Usuarios.svc/ObtenerUsuarios";
             if (this.ultimaFechaConsulta) {
                 const fechaISO = this.ultimaFechaConsulta.toISOString();
                 url += `?ultimaFechaConsulta=${fechaISO}`;
@@ -67,7 +67,7 @@ var app;
                     Activo: true
                 }
             };
-            return fetch("http://192.168.15.188:8000/Services/Usuarios.svc/AgregarUsuario", {
+            return fetch("http://localhost:52127/Services/Usuarios.svc/AgregarUsuario", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(nuevoUsuario)
@@ -100,7 +100,7 @@ var app;
             const usuarioParaActualizar = {
                 usuario: usuarioEditando
             };
-            fetch("http://192.168.15.188:8000/Services/Usuarios.svc/ActualizarUsuario", {
+            fetch("http://localhost:52127/Services/Usuarios.svc/ActualizarUsuario", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ usuario: usuarioEditando })
@@ -126,7 +126,7 @@ var app;
             if (this.usuarios.has(idUsuario)) {
                 this.usuarios.delete(idUsuario);
                 // Luego, hacemos la solicitud a la API para eliminar el usuario en la base de datos
-                fetch("http://192.168.15.188:8000/Services/Usuarios.svc/EliminarUsuario", {
+                fetch("http://localhost:52127/Services/Usuarios.svc/EliminarUsuario", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
